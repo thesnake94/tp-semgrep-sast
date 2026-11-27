@@ -1,0 +1,5 @@
+server-corrected.txt
+semgrep-results.sarif
+__pycache__/
+*.db
+.env

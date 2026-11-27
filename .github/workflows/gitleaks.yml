@@ -1,0 +1,25 @@
+name: DevSecOps - Gitleaks Secret Scan
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  gitleaks:
+    name: Gitleaks Static Secret Scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          fetch-depth: 0
+      - name: Scan Git history
+        run: >-
+          docker run --rm -v "$PWD:/repo" -w /repo
+          zricethezav/gitleaks:latest git --redact --verbose .

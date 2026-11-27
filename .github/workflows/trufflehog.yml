@@ -1,0 +1,31 @@
+name: DevSecOps - TruffleHog Secret Scan
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  trufflehog:
+    name: Scan Verified Secrets
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          fetch-depth: 0
+
+      - name: TruffleHog OSS Scan
+        uses: trufflesecurity/trufflehog@d232362a64a09a9e7d58267b8f5acef00ae90e23 # v3.100.0
+        with:
+          image: trufflesecurity/trufflehog
+          version: 3.100.0
+          # base/head are selected automatically from the push or PR event.
+          # A manual run scans the full history.
+          # The action already supplies --fail; repeating it causes an error.
+          extra_args: --results=verified
